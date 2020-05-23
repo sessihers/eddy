@@ -4,9 +4,10 @@ import './index.css';
 import App from './App';
 import * as firebase from 'firebase';
 import * as serviceWorker from './serviceWorker';
+import {getApikey} from './keys.js'
 
 const config = {
-  apiKey: "AIzaSyDShQo4FoO-EPdZqpT30yKpH2925i81Y7o",
+  apiKey: getApikey(),
   authDomain: "eddy-13476.firebaseapp.com",
   databaseURL: "https://eddy-13476.firebaseio.com",
   projectId: "eddy-13476",
