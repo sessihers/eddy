@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,7 +20,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import Container from'@material-ui/core/container';
 import Button from '@material-ui/core/Button';
 import Subjects from './Subjects';
-import Hero from './Hero'
+import Hero from './Hero';
+import {handleSignUp} from './Signup';
 
 const drawerWidth = 240;
 
@@ -65,65 +66,49 @@ const useStyles = makeStyles((theme) => ({
         ...theme.mixins.toolbar,
         justifyContent: 'flex-end',
     },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        transition: theme.transitions.create('margin', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        marginLeft: -drawerWidth
-      },
-      contentShift: {
-        transition: theme.transitions.create('margin', {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        marginLeft: 0,
-      },
 }));
 
 
-const NavBar = () => {
+const NavBar = (props) => {
+
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const toggleDrawer = props.toggleDrawer;
+    const isDrawerOpen = props.isDrawerOpen;
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     return(
         <div className={classes.root}>
         <AppBar 
             position="fixed"
-            className={clsx(classes.appBar,{ [classes.appBarShift]: open,
+            className={clsx(classes.appBar,{ [classes.appBarShift]: isDrawerOpen,
             })}
         >
             <Toolbar>
                 <IconButton 
                     edge="start" 
-                    className={clsx(classes.menuButton, open && classes.hide)} 
+                    className={clsx(classes.menuButton, isDrawerOpen && classes.hide)} 
                     color="inherit" 
                     aria-label="open drawer"
-                    onClick={handleDrawerOpen}
+                    onClick={toggleDrawer}
                     >
                     <MenuIcon />
                 </IconButton>
                 <div className={classes.title}></div>
                 <Button color="inherit">Innskrá</Button>
-                <Button color="inherit">Nýskráning</Button>
+                <Button 
+                    color="inherit"
+                    onClick={handleSignUp}
+                >
+                    Nýskráning
+                </Button>
             </Toolbar>
         </AppBar>
         <Drawer
             className={classes.drawer}
             variant="persistent"
             anchor="left"
-            open={open}
+            open={isDrawerOpen}
             classes={{
                 paper: classes.drawerPaper,
             }}    
@@ -132,7 +117,7 @@ const NavBar = () => {
                 className={classes.drawerHeader}
             >
                 <IconButton
-                    onClick={handleDrawerClose}
+                    onClick={toggleDrawer}
                 >
                     {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                 </IconButton>
@@ -156,14 +141,6 @@ const NavBar = () => {
                 ))}
             </List>
         </Drawer>
-        <main
-            className={clsx(classes.content, {
-                [classes.contentShift] : open ,
-            })}>
-                <div className={classes.drawerHeader} />
-                <Container>
-                </Container>
-            </main>
         </div>
     )
 }

@@ -5,33 +5,42 @@ import {makeStyles} from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Content from './components/Content';
+import Subjects from './components/Subjects';
 import './App.css';
 
 
 
-function App() {
+class App extends Component {
   
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-    const theme = React.useMemo(
-      () =>
-        createMuiTheme({
-          palette: {
-            type: prefersDarkMode ? 'dark' : 'light',
-          },
-        }),
-        [prefersDarkMode],
-    );
+  constructor() {
+    super();
+    this.state = {
+      isDrawerOpen: false
+    };
+    this.toggleDrawer = this.toggleDrawer.bind(this);
+  }
 
 
+  toggleDrawer ()  {
+    this.setState({isDrawerOpen: !this.state.isDrawerOpen})
+  }
+
+  render() {
     
 
+
     return (
-      <ThemeProvider theme={theme}>
+      <ThemeProvider>
         <CssBaseline/>
-        <NavBar />
+        <NavBar toggleDrawer={this.toggleDrawer} isDrawerOpen={this.state.isDrawerOpen}/>
+        <Content isDrawerOpen={this.state.isDrawerOpen}>
+          <Subjects />
+        </Content>
       </ThemeProvider>
     )
+  }
 }
 
 export default App;
